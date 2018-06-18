@@ -1,14 +1,14 @@
 package com.example.juan_.meinteresa.entidad;
-import  java.sql.Date;
+
 public class Ubicacion {
     private Integer id;
     private double latitud;
     private double longitud;
     private String descripcion;
-    private Date fecha;
+    private String fecha;
     private String titulo;
 
-    public Ubicacion(Integer id, double latitud, double longitud, String descripcion, Date fecha,String titulo) {
+    public Ubicacion(Integer id, double latitud, double longitud, String descripcion, String fecha,String titulo) {
         this.id = id;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -62,11 +62,11 @@ public class Ubicacion {
         this.descripcion = descripcion;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 }

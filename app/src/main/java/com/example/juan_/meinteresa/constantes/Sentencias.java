@@ -1,6 +1,6 @@
 package com.example.juan_.meinteresa.constantes;
 
-public class sentencias {
+public class Sentencias {
 
     //campos creacion:
     public static final String tablaNombreUb ="ubicacion";
@@ -18,7 +18,7 @@ public class sentencias {
             "                     UNIQUE,\n" +
             "    "+campoLatitud+"  DOUBLE  NOT NULL,\n" +
             "    "+campoLongitud+" DOUBLE  NOT NULL,\n" +
-            "    "+campoFecha+"    DATE,\n" +
+            "    "+campoFecha+"    TEXT,\n" +
             "    "+campoTitulo+"    TEXT  NOT NULL,\n" +
             "    "+campoDesc+"   TEXT\n" +
             ");\n";

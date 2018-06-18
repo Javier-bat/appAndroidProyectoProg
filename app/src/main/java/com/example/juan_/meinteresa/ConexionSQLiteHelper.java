@@ -3,9 +3,8 @@ package com.example.juan_.meinteresa;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.view.View;
+import com.example.juan_.meinteresa.constantes.Sentencias;
 
-import com.example.juan_.meinteresa.constantes.sentencias;
 
 public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
@@ -17,7 +16,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-    db.execSQL(sentencias.crearTablaUbicacion);
+    db.execSQL(Sentencias.crearTablaUbicacion);
     }
 
     @Override

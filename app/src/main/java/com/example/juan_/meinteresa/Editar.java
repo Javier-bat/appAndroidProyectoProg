@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.juan_.meinteresa.constantes.sentencias;
+import com.example.juan_.meinteresa.constantes.Sentencias;
 
 import com.example.juan_.meinteresa.entidad.Ubicacion;
 
@@ -24,7 +24,7 @@ public class Editar extends AppCompatActivity {
     ArrayList<String> listaTitulos;
     ArrayList<Ubicacion> ubicaciones;
     ConexionSQLiteHelper conn;
-    TextView textLong,textLat,textDesc;
+    TextView textLong,textLat,textDesc,textFecha;
     Button borrar;
     SQLiteDatabase db;
     @Override
@@ -35,6 +35,7 @@ public class Editar extends AppCompatActivity {
         textLong=(TextView) findViewById(R.id.textLong);
         textLat=(TextView) findViewById(R.id.textLat);
         textDesc=(TextView) findViewById(R.id.textDesc);
+        textFecha=(TextView) findViewById(R.id.textFecha);
         borrar=(Button) findViewById(R.id.buttonEliminar);
 
 
@@ -52,21 +53,23 @@ public class Editar extends AppCompatActivity {
                     textLong.setText(Double.toString(ubicaciones.get(posicion - 1).getLongitud()));
                     textLat.setText(Double.toString(ubicaciones.get(posicion - 1).getLatitud()));
                     textDesc.setText(ubicaciones.get(posicion - 1).getDescripcion());
+                    textFecha.setText(ubicaciones.get(posicion - 1).getFecha());
                     borrar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             String st =ubicaciones.get(posicion-1).getId().toString();
                             String[] parametro = {st};
-                            db.delete(sentencias.tablaNombreUb,sentencias.campoID+"=?",parametro);
+                            db.delete(Sentencias.tablaNombreUb, Sentencias.campoID+"=?",parametro);
                             Intent inten = new Intent(Editar.this,Editar.class);
                             startActivity(inten);
                           finish();
                         }
                     });
                 }else{
-                    textLong.setText("");
-                    textLat.setText("");
-                    textDesc.setText("");
+                    textLong.setText("Longitud");
+                    textLat.setText("Latitud");
+                    textDesc.setText("Descripcion ");
+                    textFecha.setText("Fecha");
 
                 }
             }
@@ -84,7 +87,7 @@ public class Editar extends AppCompatActivity {
         Ubicacion ubicacion = null;
 
         ubicaciones=new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM "+sentencias.tablaNombreUb,null);
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ Sentencias.tablaNombreUb,null);
 
 
         while(cursor.moveToNext()){
@@ -94,6 +97,7 @@ public class Editar extends AppCompatActivity {
             ubicacion.setLongitud(cursor.getDouble(2));
             ubicacion.setTitulo(cursor.getString(4));
             ubicacion.setDescripcion(cursor.getString(5));
+            ubicacion.setFecha(cursor.getString(3));
 
             ubicaciones.add(ubicacion);
         }

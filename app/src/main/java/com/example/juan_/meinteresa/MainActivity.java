@@ -3,17 +3,13 @@ package com.example.juan_.meinteresa;
 
 import android.Manifest;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -27,10 +23,13 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.juan_.meinteresa.constantes.sentencias;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
+import com.example.juan_.meinteresa.constantes.Sentencias;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,29 +55,42 @@ public class MainActivity extends AppCompatActivity
         campoDesc = findViewById(R.id.editTextDesc);
         campoTitulo = findViewById(R.id.textTitulo);
 
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 registrar();
+                campoDesc.setText("");
+                campoTitulo.setText("");
 
                // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     //    .setAction("Action", null).show();
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView =  findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this,"db_ubicacion",null,1);
     }
+    public String setFechaActual()
+    {
 
+        final Calendar c = Calendar.getInstance();
+
+        Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String s = formatter.format(c.getTime());
+
+        return s;
+    }
     private void registrar() {
 
         final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2;
@@ -104,12 +116,12 @@ public class MainActivity extends AppCompatActivity
         ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this,"db_ubicacion",null,1);
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(sentencias.campoDesc,campoDesc.getText().toString());
-        cv.put(sentencias.campoLatitud,latitude);
-        cv.put(sentencias.campoLongitud,longitude);
-        cv.put(sentencias.campoTitulo,campoTitulo.getText().toString());
-
-        Long idResult=db.insert(sentencias.tablaNombreUb,sentencias.campoID,cv);
+        cv.put(Sentencias.campoDesc,campoDesc.getText().toString());
+        cv.put(Sentencias.campoLatitud,latitude);
+        cv.put(Sentencias.campoLongitud,longitude);
+        cv.put(Sentencias.campoTitulo,campoTitulo.getText().toString());
+        cv.put(Sentencias.campoFecha,setFechaActual());
+        Long idResult=db.insert(Sentencias.tablaNombreUb, Sentencias.campoID,cv);
 
       if(idResult!=null && idResult !=0){  Toast.makeText(getApplicationContext(),"Registrado con exito en la base de datos... ID: "+idResult ,Toast.LENGTH_SHORT).show();}
         db.close();
