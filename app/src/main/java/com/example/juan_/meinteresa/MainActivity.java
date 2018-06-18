@@ -41,29 +41,12 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         LocationManager locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
+                getSystemService(getApplicationContext().LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-
-        Location location = locationManager.getLastKnownLocation(locationManager
-                .getBestProvider(criteria, false));
-
-        if(location!= null){
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
 
 
-
-        }else{
-            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER,0,0, (LocationListener) this);
-        }
         campoDesc = findViewById(R.id.editTextDesc);
-
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +81,7 @@ public class MainActivity extends AppCompatActivity
 
         Long idResult=db.insert(sentencias.tablaNombreUb,sentencias.campoID,cv);
 
-      if(idResult!=null && idResult !=0){  Toast.makeText(getApplicationContext(),"Registrado con exito en la base de datos" ,Toast.LENGTH_SHORT).show();}
+      if(idResult!=null && idResult !=0){  Toast.makeText(getApplicationContext(),"Registrado con exito en la base de datos... ID: "+idResult ,Toast.LENGTH_SHORT).show();}
         db.close();
     }
 

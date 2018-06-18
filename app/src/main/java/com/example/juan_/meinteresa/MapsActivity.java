@@ -23,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -58,7 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+       /* mMap = googleMap;
         googleMap.setMapType(googleMap.MAP_TYPE_NORMAL);
 
 
@@ -84,8 +85,74 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,16));
         }else{
            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER,0,0, (LocationListener) this);
+        }*/
+        mMap = googleMap;
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2;
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+        }else{mMap.setMyLocationEnabled(true);
+                LocationManager locationManager;
+                locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
+                Location location =locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if(location!=null){
+                   double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    LatLng ubicacion = new LatLng(latitude, longitude);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,12));
+                }else{}
+
+
+
+
         }
 
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 2: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    mMap.setMyLocationEnabled(true);
+                    LocationManager locationManager;
+                    locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
+                    Location location =locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    if(location!=null){
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        LatLng ubicacion = new LatLng(latitude, longitude);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,12));
+                    }else{}
+
+
+                } else {
+                }
+                return;
+            }
+        }
+    }
 }
+
+
+
