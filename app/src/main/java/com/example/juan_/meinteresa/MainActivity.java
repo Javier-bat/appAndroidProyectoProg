@@ -28,11 +28,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.juan_.meinteresa.constantes.sentencias;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     EditText campoId, campoDesc, campoLat,campoLong;
-    double latitude,longitude;
+    double latitude=0, longitude=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +43,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        LocationManager locationManager = (LocationManager)
-                getSystemService(getApplicationContext().LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
+
+
+
+
+
+
+
 
 
 
@@ -72,6 +79,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void registrar() {
+
+        final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2;
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+        }else{
+            LocationManager locationManager;
+            locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
+            Location location =locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if(location!=null){
+                 latitude = location.getLatitude();
+                 longitude = location.getLongitude();
+                LatLng ubicacion = new LatLng(latitude, longitude);
+
+            }else{}}
+        if(longitude!=0 && latitude !=0){
         ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this,"db_ubicacion",null,1);
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -83,7 +111,7 @@ public class MainActivity extends AppCompatActivity
 
       if(idResult!=null && idResult !=0){  Toast.makeText(getApplicationContext(),"Registrado con exito en la base de datos... ID: "+idResult ,Toast.LENGTH_SHORT).show();}
         db.close();
-    }
+    }}
 
     @Override
     public void onBackPressed() {
