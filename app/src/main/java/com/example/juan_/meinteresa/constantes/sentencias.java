@@ -9,6 +9,7 @@ public class sentencias {
     public static final String campoLongitud ="longitud";
     public static final String campoFecha ="fecha";
     public static final String campoDesc ="desc";
+    public static final String campoTitulo ="titulo";
 
 
     public static final String crearTablaUbicacion="CREATE TABLE "+tablaNombreUb+" (\n" +
@@ -18,6 +19,7 @@ public class sentencias {
             "    "+campoLatitud+"  DOUBLE  NOT NULL,\n" +
             "    "+campoLongitud+" DOUBLE  NOT NULL,\n" +
             "    "+campoFecha+"    DATE,\n" +
+            "    "+campoTitulo+"    TEXT  NOT NULL,\n" +
             "    "+campoDesc+"   TEXT\n" +
             ");\n";
 

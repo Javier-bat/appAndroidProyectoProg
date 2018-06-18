@@ -6,21 +6,36 @@ public class Ubicacion {
     private double longitud;
     private String descripcion;
     private Date fecha;
+    private String titulo;
 
-    public Ubicacion(Integer id, double latitud, double longitud, String descripcion, Date fecha) {
+    public Ubicacion(Integer id, double latitud, double longitud, String descripcion, Date fecha,String titulo) {
         this.id = id;
         this.latitud = latitud;
         this.longitud = longitud;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.titulo=titulo;
+    }
+
+    public Ubicacion() {
+
     }
 
     public Integer getId() {
         return id;
     }
 
+
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public double getLatitud() {

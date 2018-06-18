@@ -34,7 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    EditText campoId, campoDesc, campoLat,campoLong;
+    EditText campoTitulo, campoDesc, campoLat,campoLong;
     double latitude=0, longitude=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity
 
 
         campoDesc = findViewById(R.id.editTextDesc);
+        campoTitulo = findViewById(R.id.textTitulo);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity
         cv.put(sentencias.campoDesc,campoDesc.getText().toString());
         cv.put(sentencias.campoLatitud,latitude);
         cv.put(sentencias.campoLongitud,longitude);
+        cv.put(sentencias.campoTitulo,campoTitulo.getText().toString());
 
         Long idResult=db.insert(sentencias.tablaNombreUb,sentencias.campoID,cv);
 
@@ -153,7 +155,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_edit) {
-            // Handle the camera action
+            Intent inten = new Intent(MainActivity.this,Editar.class);
+            startActivity(inten);
         } else if (id == R.id.nav_map) {
             Intent inten = new Intent(MainActivity.this,MapsActivity.class);
             startActivity(inten);
