@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -14,14 +16,19 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
+import com.example.juan_.meinteresa.constantes.Sentencias;
+import com.example.juan_.meinteresa.entidad.Ubicacion;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -29,11 +36,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     double longMapeo=0;
     double latMapeo=0;
-
+    ArrayList<Ubicacion> ubicaciones;
+    ArrayList<Puntos> puntos;
+    ArrayList<LatLng> latLngsPuntos;
+    ConexionSQLiteHelper conn;
+    SQLiteDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        conn = new ConexionSQLiteHelper(this,"db_ubicacion",null,1);
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -113,6 +125,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double longitude = location.getLongitude();
                 LatLng ubicacion = new LatLng(latitude, longitude);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 12));
+                consultarLista();
+                latLngsPuntos=new ArrayList<>();
+                if(puntos!=null){
+                for (int i = 0;i<puntos.size();i++){
+
+                    LatLng punto = new LatLng(puntos.get(i).getLatitud(), puntos.get(i).getLongitud());
+
+                    latLngsPuntos.add(punto);
+
+
+                }
+                for (int i = 0;i<puntos.size();i++) {
+
+                    mMap.addMarker(new MarkerOptions().position(latLngsPuntos.get(i)).title(puntos.get(i).getTitulo()).icon(BitmapDescriptorFactory.defaultMarker(
+                            BitmapDescriptorFactory.HUE_RED))
+
+                    );
+                }
+
+                }
+
             }
 
 
@@ -121,7 +154,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    private void consultarLista() {
+        db= conn.getReadableDatabase();
+        Ubicacion ubicacion = null;
 
+        ubicaciones=new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ Sentencias.tablaNombreUb,null);
+
+
+        while(cursor.moveToNext()){
+            ubicacion = new Ubicacion();
+            ubicacion.setId(cursor.getInt(0));
+            ubicacion.setLatitud(cursor.getDouble(1));
+            ubicacion.setLongitud(cursor.getDouble(2));
+            ubicacion.setTitulo(cursor.getString(4));
+            ubicacion.setDescripcion(cursor.getString(5));
+            ubicacion.setFecha(cursor.getString(3));
+
+            ubicaciones.add(ubicacion);
+        }
+        crearPuntos();
+    }
+
+    private void crearPuntos() {
+        puntos =new ArrayList<Puntos>();
+
+        for (int i=0;i<ubicaciones.size();i++){
+            Puntos pu = new Puntos();
+            pu.setLatitud(ubicaciones.get(i).getLatitud());
+            pu.setLongitud(ubicaciones.get(i).getLongitud());
+            pu.setTitulo(ubicaciones.get(i).getTitulo());
+            puntos.add(pu);
+
+        }
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -144,6 +211,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         double longitude = location.getLongitude();
                         LatLng ubicacion = new LatLng(latitude, longitude);
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,12));
+                        consultarLista();
+                        latLngsPuntos=new ArrayList<>();
+                        if(puntos!=null){
+                        for (int i = 0;i<puntos.size();i++){
+
+                            LatLng punto = new LatLng(puntos.get(i).getLatitud(), puntos.get(i).getLongitud());
+
+                            latLngsPuntos.add(punto);
+
+
+                        }
+                        for (int i = 0;i<puntos.size();i++) {
+
+                            mMap.addMarker(new MarkerOptions().position(latLngsPuntos.get(i)).title(puntos.get(i).getTitulo()).icon(BitmapDescriptorFactory.defaultMarker(
+                                    BitmapDescriptorFactory.HUE_RED))
+
+                            );
+                        }
+
+                        }
                     }else{}
 
 
@@ -153,7 +240,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+
 }
 
+class Puntos{
+    private Double latitud;
+    private Double longitud;
+    private String titulo;
 
+    public Puntos() {
+    }
+
+    public Puntos(Double latitud, Double longitud,String titulo) {
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.titulo=titulo;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
+    }
+}
 
