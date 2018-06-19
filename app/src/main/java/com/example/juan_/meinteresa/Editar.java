@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-
+import com.example.juan_.meinteresa.DAO.ConexionSQLiteHelper;
 import com.example.juan_.meinteresa.entidad.Ubicacion;
 import com.example.juan_.meinteresa.DAO.UbicacionDAO;
 
@@ -93,7 +93,7 @@ public class Editar extends AppCompatActivity {
 
                             startActivity(inten); //inicio la activity
 
-                            finish(); //cierro la activity anterior
+
                         }
                     });
                     editar.setOnClickListener(new View.OnClickListener() {

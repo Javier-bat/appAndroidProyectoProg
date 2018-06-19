@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.EditText;
 
-import com.example.juan_.meinteresa.ConexionSQLiteHelper;
 import com.example.juan_.meinteresa.MainActivity;
 import com.example.juan_.meinteresa.constantes.Sentencias;
 import com.example.juan_.meinteresa.entidad.Ubicacion;

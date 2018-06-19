@@ -2,11 +2,8 @@ package com.example.juan_.meinteresa;
 
 
 import android.Manifest;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -25,9 +22,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.juan_.meinteresa.DAO.ConexionSQLiteHelper;
 import com.example.juan_.meinteresa.DAO.UbicacionDAO;
-import com.example.juan_.meinteresa.constantes.Sentencias;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;

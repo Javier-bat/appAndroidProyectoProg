@@ -3,21 +3,16 @@ package com.example.juan_.meinteresa;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 
+import com.example.juan_.meinteresa.DAO.ConexionSQLiteHelper;
 import com.example.juan_.meinteresa.DAO.UbicacionDAO;
-import com.example.juan_.meinteresa.constantes.Sentencias;
 import com.example.juan_.meinteresa.entidad.Ubicacion;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -95,14 +90,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LocationManager locationManager;
             locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            consultarLista();
+            latLngsPuntos=new ArrayList<>();
             if (location != null) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 LatLng ubicacion = new LatLng(latitude, longitude);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 12));
-                consultarLista();
-                latLngsPuntos=new ArrayList<>();
+
+
+
+            }else{
                 if(puntos!=null){
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(puntos.get(1).getLatitud(),puntos.get(1).getLongitud())),12));
+                }
+            }
+
+            if(puntos!=null){
                 for (int i = 0;i<puntos.size();i++){
 
                     LatLng punto = new LatLng(puntos.get(i).getLatitud(), puntos.get(i).getLongitud());
@@ -119,8 +123,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     );
                 }
 
-                }
-
             }
 
 
@@ -130,11 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void consultarLista() {
-        db= conn.getReadableDatabase();
-        Ubicacion ubicacion = null;
-
-        ubicaciones=new ArrayList<>();
-        ubicaciones= UbicacionDAO.consultarLista(ubicaciones,getApplicationContext());
+        ubicaciones = UbicacionDAO.consultarLista(ubicaciones,getApplicationContext());
         crearPuntos();
     }
 
@@ -167,15 +165,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.setMyLocationEnabled(true);
                     LocationManager locationManager;
                     locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
-                    Location location =locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    if(location!=null){
+                    Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    consultarLista();
+                    latLngsPuntos=new ArrayList<>();
+                    if (location != null) {
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
                         LatLng ubicacion = new LatLng(latitude, longitude);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,12));
-                        consultarLista();
-                        latLngsPuntos=new ArrayList<>();
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 12));
+
+
+
+                        }else{
                         if(puntos!=null){
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(puntos.get(1).getLatitud(),puntos.get(1).getLongitud())),12));
+                        }
+                    }
+
+                    if(puntos!=null){
                         for (int i = 0;i<puntos.size();i++){
 
                             LatLng punto = new LatLng(puntos.get(i).getLatitud(), puntos.get(i).getLongitud());
@@ -192,11 +199,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             );
                         }
 
-                        }
-                    }else{}
+                    }
 
 
-                } else {
                 }
                 return;
             }

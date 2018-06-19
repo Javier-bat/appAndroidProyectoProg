@@ -1,4 +1,4 @@
-package com.example.juan_.meinteresa;
+package com.example.juan_.meinteresa.DAO;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
