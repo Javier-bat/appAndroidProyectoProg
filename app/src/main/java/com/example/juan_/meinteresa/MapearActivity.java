@@ -74,44 +74,93 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-
+        final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        } else {
+            mMap.setMyLocationEnabled(true);
 
-        LatLng punto = new LatLng(latitud, longitud);
-        mMap.addMarker(new MarkerOptions().position(punto).title(titulo));
-       // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto,17));
-        LocationManager locationManager;
-        locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        if (location != null) {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            LatLng ubicacion = new LatLng(latitude, longitude);
-            mMap.addMarker(new MarkerOptions().position(ubicacion).title("Ubicacion").icon(BitmapDescriptorFactory.defaultMarker(
-                    BitmapDescriptorFactory.HUE_BLUE))
+            LatLng punto = new LatLng(latitud, longitud);
+            mMap.addMarker(new MarkerOptions().position(punto).title(titulo));
+            // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto,17));
+            LocationManager locationManager;
+            locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                LatLng ubicacion = new LatLng(latitude, longitude);
+                mMap.addMarker(new MarkerOptions().position(ubicacion).title("Ubicacion").icon(BitmapDescriptorFactory.defaultMarker(
+                        BitmapDescriptorFactory.HUE_BLUE))
 
-            );
-            String url = getRequestUrl(ubicacion,punto);
-            TaskRequestDirection taskRequestDirection = new TaskRequestDirection();
-            taskRequestDirection.execute(url);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,17));
-        }else{
+                );
+                String url = getRequestUrl(ubicacion, punto);
+                TaskRequestDirection taskRequestDirection = new TaskRequestDirection();
+                taskRequestDirection.execute(url);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 17));
+            } else {
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto,17));
-            Toast.makeText(getApplicationContext(),"Ha ocurrido un error al trazar la ruta, compruebe si tiene la ubicacion activada" ,Toast.LENGTH_LONG).show();
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto, 17));
+                Toast.makeText(getApplicationContext(), "Ha ocurrido un error al trazar la ruta, compruebe si tiene la ubicacion activada", Toast.LENGTH_LONG).show();
 
+            }
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 2: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        return;
+                    }
+                    mMap.setMyLocationEnabled(true);
+
+                    LatLng punto = new LatLng(latitud, longitud);
+                    mMap.addMarker(new MarkerOptions().position(punto).title(titulo));
+                    // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto,17));
+                    LocationManager locationManager;
+                    locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
+                    Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    if (location != null) {
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        LatLng ubicacion = new LatLng(latitude, longitude);
+                        mMap.addMarker(new MarkerOptions().position(ubicacion).title("Ubicacion").icon(BitmapDescriptorFactory.defaultMarker(
+                                BitmapDescriptorFactory.HUE_BLUE))
+
+                        );
+                        String url = getRequestUrl(ubicacion,punto);
+                        TaskRequestDirection taskRequestDirection = new TaskRequestDirection();
+                        taskRequestDirection.execute(url);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,17));
+                    }else{
+
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto,17));
+                        Toast.makeText(getApplicationContext(),"Ha ocurrido un error al trazar la ruta, compruebe si tiene la ubicacion activada" ,Toast.LENGTH_LONG).show();
+
+                    }
+
+                    }else{
+                    LatLng punto = new LatLng(latitud, longitud);
+                    mMap.addMarker(new MarkerOptions().position(punto).title(titulo));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto,17));
+                    Toast.makeText(getApplicationContext(),"Acepte los permisos para poder marcar la ruta" ,Toast.LENGTH_LONG).show();
+
+                }
+
+
+                }
+                return;
+            }
+        }
 
     private String getRequestUrl(LatLng origen, LatLng destino) {
         String str_org = "origin="+origen.latitude +","+origen.longitude;
