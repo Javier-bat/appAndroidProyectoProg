@@ -96,9 +96,13 @@ public class Editar extends AppCompatActivity {
                             values.put(Sentencias.campoTitulo,textTitulo.getText().toString());
                             values.put(Sentencias.campoDesc,textEditTextDesc.getText().toString());
 
-                            dbM.update(Sentencias.tablaNombreUb,values,Sentencias.campoID+"=?",parametroID);
+                           int up= dbM.update(Sentencias.tablaNombreUb,values,Sentencias.campoID+"=?",parametroID);
                             dbM.close();
-                            Toast.makeText(getApplicationContext(),"Actualizado correctamente" ,Toast.LENGTH_SHORT).show();
+                            if(up!=-1){Toast.makeText(getApplicationContext(),"Actualizado correctamente" ,Toast.LENGTH_SHORT).show();}
+                            else{Toast.makeText(getApplicationContext(),"Hubo un error al actualizar los datos" ,Toast.LENGTH_SHORT).show();
+
+                            }
+
                             Intent inten = new Intent(Editar.this,Editar.class);
                             startActivity(inten);
                             finish();
@@ -110,8 +114,13 @@ public class Editar extends AppCompatActivity {
                             String st =ubicaciones.get(posicion-1).getId().toString();
 
                             String[] parametro = {st};
-                            db.delete(Sentencias.tablaNombreUb, Sentencias.campoID+"=?",parametro);
-                            Toast.makeText(getApplicationContext(),"Eliminado correctamente" ,Toast.LENGTH_SHORT).show();
+                           int up= db.delete(Sentencias.tablaNombreUb, Sentencias.campoID+"=?",parametro);
+                            if(up!=-1){Toast.makeText(getApplicationContext(),"Eliminado correctamente" ,Toast.LENGTH_SHORT).show();}
+                            else{Toast.makeText(getApplicationContext(),"Hubo un error al borrar los datos" ,Toast.LENGTH_SHORT).show();
+
+                            }
+
+
                             Intent inten = new Intent(Editar.this,Editar.class);
                             startActivity(inten);
                           finish();

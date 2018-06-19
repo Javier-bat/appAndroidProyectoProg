@@ -12,18 +12,17 @@
         android:id="@+id/textQueViste"
         android:layout_width="0dp"
         android:layout_height="34dp"
-        android:layout_marginBottom="369dp"
+        android:layout_marginBottom="284dp"
         android:text="¿Que Viste? : "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editTextDesc"
-        app:layout_constraintStart_toStartOf="@+id/editTextDesc"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextDesc" />
 
     <TextView
         android:id="@+id/txtTitulo"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="303dp"
+        android:layout_height="44dp"
         android:layout_marginEnd="67dp"
         android:layout_marginLeft="67dp"
         android:layout_marginRight="67dp"
@@ -34,7 +33,6 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:fontFamily="monospace"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +43,7 @@
         android:layout_height="124dp"
         android:layout_marginLeft="44dp"
         android:layout_marginStart="44dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="60dp"
         android:ems="10"
         android:inputType="textMultiLine"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,16 +52,15 @@
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="138dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="392dp"
         android:layout_marginEnd="17dp"
         android:layout_marginRight="17dp"
         android:text="Titulo:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textTitulo"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/textTitulo"

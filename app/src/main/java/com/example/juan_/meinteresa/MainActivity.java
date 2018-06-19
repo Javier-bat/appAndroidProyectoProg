@@ -118,7 +118,9 @@ public class MainActivity extends AppCompatActivity
                  longitude = location.getLongitude();
                 LatLng ubicacion = new LatLng(latitude, longitude);
 
-            }else{}}
+            }else{
+                Toast.makeText(getApplicationContext(),"Ha ocurrido un error compruebe si tiene la ubicacion activada" ,Toast.LENGTH_SHORT).show();
+            }}
         if(longitude!=0 && latitude !=0){
         ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this,"db_ubicacion",null,1);
         SQLiteDatabase db = conn.getWritableDatabase();
@@ -129,8 +131,11 @@ public class MainActivity extends AppCompatActivity
         cv.put(Sentencias.campoTitulo,campoTitulo.getText().toString());
         cv.put(Sentencias.campoFecha,setFechaActual());
         Long idResult=db.insert(Sentencias.tablaNombreUb, Sentencias.campoID,cv);
+        longitude=0;
+        latitude=0;
 
       if(idResult!=null && idResult !=0){  Toast.makeText(getApplicationContext(),"Registrado con exito en la base de datos... ID: "+idResult ,Toast.LENGTH_SHORT).show();}
+
         db.close();
     }}
 

@@ -106,7 +106,10 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
             taskRequestDirection.execute(url);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,17));
         }else{
-            Toast.makeText(getApplicationContext(),"No se pudo localizar",Toast.LENGTH_LONG);
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto,17));
+            Toast.makeText(getApplicationContext(),"Ha ocurrido un error al trazar la ruta, compruebe si tiene la ubicacion activada" ,Toast.LENGTH_LONG).show();
+
         }
     }
 
