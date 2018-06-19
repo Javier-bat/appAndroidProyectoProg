@@ -1,14 +1,18 @@
 package com.example.juan_.meinteresa;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.juan_.meinteresa.constantes.DirectionsParser;
@@ -96,10 +100,15 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
                         BitmapDescriptorFactory.HUE_BLUE))
 
                 );
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 17));
+                Log.e("netHabilitada", Boolean.toString(isNetDisponible()));
+                Log.e("accInternet",   Boolean.toString(isOnlineNet()));
+                if(isNetDisponible() && isOnlineNet()){
                 String url = getRequestUrl(ubicacion, punto);
                 TaskRequestDirection taskRequestDirection = new TaskRequestDirection();
                 taskRequestDirection.execute(url);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 17));
+                }else{Toast.makeText(getApplicationContext(),"Revise su conexion"
+                        + " a internet",Toast.LENGTH_LONG);}
             } else {
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto, 17));
@@ -108,7 +117,21 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
             }
         }
     }
+    private boolean isNetDisponible() {
 
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
+    }
+    public Boolean isOnlineNet() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -137,10 +160,13 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
                                 BitmapDescriptorFactory.HUE_BLUE))
 
                         );
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,17));
+                        if(isNetDisponible() && isOnlineNet()){
                         String url = getRequestUrl(ubicacion,punto);
                         TaskRequestDirection taskRequestDirection = new TaskRequestDirection();
                         taskRequestDirection.execute(url);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,17));
+                        }else{Toast.makeText(getApplicationContext(),"Revise su conexion"
+                               + " a internet",Toast.LENGTH_LONG);}
                     }else{
 
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto,17));

@@ -48,6 +48,8 @@
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait"/>
         <activity android:name=".Editar"
+            android:configChanges="screenSize|orientation"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".MapearActivity"

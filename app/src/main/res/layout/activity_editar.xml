@@ -6,20 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".Editar">
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
-        android:background="@android:color/background_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--<Spinner-->
+        <!--android:id="@+id/spinner"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="35dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="64dp"-->
+        <!--android:background="@android:color/background_light"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
     <TextView
         android:id="@+id/textView2"
@@ -30,9 +30,12 @@
         android:layout_marginRight="112dp"
         android:layout_marginTop="32dp"
         android:text="Lista de intereses: "
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"        />
+<!--
+    app:layout_constraintBottom_toTopOf="@+id/spinner"
+-->
 
     <Button
         android:id="@+id/buttonMapear"
@@ -41,10 +44,12 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="11dp"
         android:layout_marginRight="11dp"
+        android:layout_marginTop="8dp"
         android:text="Mapear"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonEditar" />
+        app:layout_constraintStart_toEndOf="@+id/buttonEditar"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
         android:id="@+id/textDesc"
@@ -54,7 +59,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="9dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="36dp"
         android:text="Descripcion : "
         app:layout_constraintEnd_toStartOf="@+id/editTextDesc"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,10 +90,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="19dp"
+        android:layout_marginTop="8dp"
         android:text="EDITAR"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonMapear"
-        app:layout_constraintStart_toEndOf="@+id/buttonEliminar" />
+        app:layout_constraintStart_toEndOf="@+id/buttonEliminar"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <Button
         android:id="@+id/buttonEliminar"
@@ -99,10 +106,12 @@
         android:layout_marginLeft="3dp"
         android:layout_marginRight="6dp"
         android:layout_marginStart="3dp"
+        android:layout_marginTop="8dp"
         android:text="Eliminar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonEditar"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
         android:id="@+id/textFecha"
@@ -118,10 +127,11 @@
         android:id="@+id/editTextTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="153dp"
+        android:layout_marginTop="208dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Titulo"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textTitulo"
         app:layout_constraintTop_toTopOf="parent" />
@@ -135,6 +145,7 @@
         android:layout_marginRight="25dp"
         android:layout_marginStart="10dp"
         android:text="Titulo : "
+        android:textSize="17sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/editTextTitulo"
         app:layout_constraintEnd_toStartOf="@+id/editTextTitulo"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -146,9 +157,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="28dp"
         android:layout_marginRight="28dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Descripcion"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textDesc"
         app:layout_constraintTop_toBottomOf="@+id/editTextTitulo" />
@@ -165,8 +178,8 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="35dp"
-        android:layout_marginStart="35dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
         android:text="Longitud : "
         app:layout_constraintBaseline_toBaselineOf="@+id/textLong"
         app:layout_constraintStart_toStartOf="parent" />
@@ -178,5 +191,19 @@
         android:text="Fecha : "
         app:layout_constraintBaseline_toBaselineOf="@+id/textFecha"
         app:layout_constraintEnd_toEndOf="@+id/textView6" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="0dp"
+        android:layout_height="122dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="60dp"
+        android:verticalScrollbarPosition="left"
+
+        app:layout_constraintBottom_toTopOf="@+id/editTextTitulo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
