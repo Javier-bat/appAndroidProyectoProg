@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
+import com.example.juan_.meinteresa.DAO.UbicacionDAO;
 import com.example.juan_.meinteresa.constantes.Sentencias;
 import com.example.juan_.meinteresa.entidad.Ubicacion;
 import com.google.android.gms.common.ConnectionResult;
@@ -75,33 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-       /* mMap = googleMap;
-        googleMap.setMapType(googleMap.MAP_TYPE_NORMAL);
 
-
-        // Add a marker in Sydney and move the camera
-
-        LocationManager locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        googleMap.setMyLocationEnabled(true);
-        Location location = locationManager.getLastKnownLocation(locationManager
-                .getBestProvider(criteria, false));
-
-        if(location!= null){
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            LatLng ubicacion = new LatLng(latitude, longitude);
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,16));
-        }else{
-           locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER,0,0, (LocationListener) this);
-        }*/
 
         mMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -159,20 +134,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Ubicacion ubicacion = null;
 
         ubicaciones=new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM "+ Sentencias.tablaNombreUb,null);
-
-
-        while(cursor.moveToNext()){
-            ubicacion = new Ubicacion();
-            ubicacion.setId(cursor.getInt(0));
-            ubicacion.setLatitud(cursor.getDouble(1));
-            ubicacion.setLongitud(cursor.getDouble(2));
-            ubicacion.setTitulo(cursor.getString(4));
-            ubicacion.setDescripcion(cursor.getString(5));
-            ubicacion.setFecha(cursor.getString(3));
-
-            ubicaciones.add(ubicacion);
-        }
+        ubicaciones= UbicacionDAO.consultarLista(ubicaciones,getApplicationContext());
         crearPuntos();
     }
 

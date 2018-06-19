@@ -1,6 +1,7 @@
 package com.example.juan_.meinteresa.entidad;
-
+//este es mi unico modelo
 public class Ubicacion {
+    //argumentos
     private Integer id;
     private double latitud;
     private double longitud;
@@ -8,6 +9,7 @@ public class Ubicacion {
     private String fecha;
     private String titulo;
 
+    //constructor lleno
     public Ubicacion(Integer id, double latitud, double longitud, String descripcion, String fecha,String titulo) {
         this.id = id;
         this.latitud = latitud;
@@ -16,11 +18,11 @@ public class Ubicacion {
         this.fecha = fecha;
         this.titulo=titulo;
     }
-
+//constructor vacio
     public Ubicacion() {
 
     }
-
+//getter y setter
     public Integer getId() {
         return id;
     }

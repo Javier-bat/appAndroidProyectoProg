@@ -1,11 +1,12 @@
 package com.example.juan_.meinteresa;
 
-import android.content.ContentValues;
+import android.annotation.SuppressLint;
+
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
+
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.Telephony;
+
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,20 +17,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.juan_.meinteresa.constantes.Sentencias;
-import com.example.juan_.meinteresa.MapsActivity;
+
 import com.example.juan_.meinteresa.entidad.Ubicacion;
+import com.example.juan_.meinteresa.DAO.UbicacionDAO;
 
 import java.util.ArrayList;
-
+//activity editar
 public class Editar extends AppCompatActivity {
 
-    Spinner spiner;
+//creo los objetos que voy a usar, los creo aca para que puedan ser tomados por otros metodos
     ArrayList<String> listaTitulos;
     ArrayList<Ubicacion> ubicaciones;
     ConexionSQLiteHelper conn;
@@ -45,6 +46,7 @@ public class Editar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar);
         //spiner = (Spinner) findViewById(R.id.spinner);
+        //enlazo cada campo con su id
         textLong = (TextView) findViewById(R.id.textLong);
         textLat = (TextView) findViewById(R.id.textLat);
         textDesc = (TextView) findViewById(R.id.textDesc);
@@ -55,23 +57,26 @@ public class Editar extends AppCompatActivity {
         textEditTextDesc = findViewById(R.id.editTextDesc);
         editar = findViewById(R.id.buttonEditar);
         lv = findViewById(R.id.listView);
-
+//conecto la base de datos
         conn = new ConexionSQLiteHelper(this, "db_ubicacion", null, 1);
 
 
-        consultarLista();
-        ArrayAdapter<CharSequence> adaptador = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listaTitulos);
+       ubicaciones=UbicacionDAO.consultarLista(ubicaciones,getApplicationContext()); //consulto lista de puntos
+        listaTitulos=UbicacionDAO.obtenerLista(ubicaciones,listaTitulos);
+        //creo una adapter y le paso la lista de titulos (arraylist(
+        ArrayAdapter adaptador = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listaTitulos);
 
-       // spiner.setAdapter(adaptador);
-        lv.setAdapter(adaptador);
+
+        lv.setAdapter(adaptador); //le seteo el adaptador al listview
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int posicion, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int posicion, long id) { //listener del listview (si apreto algun item)
 
 
-
-
+                        //la variable posicion muestra la posicion del click
+                //seteo cada campo con la posicion del mismo objeto
                     textLong.setText(Double.toString(ubicaciones.get(posicion).getLongitud()));
                     textLat.setText(Double.toString(ubicaciones.get(posicion).getLatitud()));
                     textEditTextDesc.setText(ubicaciones.get(posicion ).getDescripcion());
@@ -79,37 +84,30 @@ public class Editar extends AppCompatActivity {
                     textTitulo.setText(ubicaciones.get(posicion).getTitulo());
                     mapear.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
-                            Intent inten = new Intent(Editar.this,MapearActivity.class);
+                        public void onClick(View view) { //si apreto mapear
+                            Intent inten = new Intent(Editar.this,MapearActivity.class); //creo un intent
 
-                            inten.putExtra("latitud",ubicaciones.get(posicion).getLatitud());
+                            inten.putExtra("latitud",ubicaciones.get(posicion).getLatitud()); //le paso unos parametros extras necesarios
                             inten.putExtra("longitud",ubicaciones.get(posicion).getLongitud());
                             inten.putExtra("titulo",ubicaciones.get(posicion).getTitulo());
 
-                            startActivity(inten);
+                            startActivity(inten); //inicio la activity
 
-                            finish();
+                            finish(); //cierro la activity anterior
                         }
                     });
                     editar.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(View view) { //si aprieto editar
 
                             if(textTitulo==null || textTitulo.getText().toString().trim().isEmpty()){
-                                Snackbar.make(view, "El Titulo es obligatorio", Snackbar.LENGTH_LONG)
+                                Snackbar.make(view, "El Titulo es obligatorio", Snackbar.LENGTH_LONG) //si el titulo esta vacio devuelvo mensaje
                                         .setAction("Action", null).show();
 
                             }else{
-                                SQLiteDatabase dbM = conn.getWritableDatabase();
 
+                             int up = UbicacionDAO.editar( ubicaciones, posicion, textTitulo, textEditTextDesc, getApplicationContext()); //sino llamo a DAO editar
 
-                                String[] parametroID = {ubicaciones.get(posicion).getId().toString()};
-                                ContentValues values = new ContentValues();
-                                values.put(Sentencias.campoTitulo,textTitulo.getText().toString());
-                                values.put(Sentencias.campoDesc,textEditTextDesc.getText().toString());
-
-                                int up= dbM.update(Sentencias.tablaNombreUb,values,Sentencias.campoID+"=?",parametroID);
-                                dbM.close();
                                 if(up!=-1){Toast.makeText(getApplicationContext(),"Actualizado correctamente" ,Toast.LENGTH_SHORT).show();}
                                 else{Toast.makeText(getApplicationContext(),"Hubo un error al actualizar los datos" ,Toast.LENGTH_SHORT).show();
 
@@ -122,16 +120,14 @@ public class Editar extends AppCompatActivity {
                     });
                     borrar.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(View view) { //si aprieto borrar
                             AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Editar.this);
-                            dialogo1.setTitle("Importante");
+                            dialogo1.setTitle("Importante");  //pregunto si realmente quiere borrar
                             dialogo1.setMessage("¿ Esta seguro que desea eliminar " + ubicaciones.get(posicion).getTitulo() + "?");
                             dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialogo1, int j) {
-                                    String st = ubicaciones.get(posicion).getId().toString();
+                                public void onClick(DialogInterface dialogo1, int j) { //si confirma
 
-                                    String[] parametro = {st};
-                                    int up = db.delete(Sentencias.tablaNombreUb, Sentencias.campoID + "=?", parametro);
+                                   int up= UbicacionDAO.borrar( ubicaciones, posicion, getApplicationContext());
                                     if (up != -1) {
                                         Toast.makeText(getApplicationContext(), "Eliminado correctamente", Toast.LENGTH_SHORT).show();
                                     } else {
@@ -147,7 +143,7 @@ public class Editar extends AppCompatActivity {
                             });
                             dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialogo1, int j) {
-
+ //si no confirma no hacer nada
                                 }
                             });
                             dialogo1.show();
@@ -158,123 +154,9 @@ public class Editar extends AppCompatActivity {
 
             }
         });
-//        spiner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, final int posicion, long id) {
-//                if(posicion!=0) {
-//                    textLong.setText(Double.toString(ubicaciones.get(posicion - 1).getLongitud()));
-//                    textLat.setText(Double.toString(ubicaciones.get(posicion - 1).getLatitud()));
-//                    textEditTextDesc.setText(ubicaciones.get(posicion - 1).getDescripcion());
-//                    textFecha.setText(ubicaciones.get(posicion - 1).getFecha());
-//                    textTitulo.setText(ubicaciones.get(posicion-1).getTitulo());
-//                    mapear.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            Intent inten = new Intent(Editar.this,MapearActivity.class);
-//
-//                            inten.putExtra("latitud",ubicaciones.get(posicion - 1).getLatitud());
-//                            inten.putExtra("longitud",ubicaciones.get(posicion - 1).getLongitud());
-//                            inten.putExtra("titulo",ubicaciones.get(posicion - 1).getTitulo());
-//
-//                            startActivity(inten);
-//
-//                            finish();
-//                        }
-//                    });
-//                    editar.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//
-//                            if(textTitulo==null || textTitulo.getText().toString().trim().isEmpty()){
-//                                Snackbar.make(view, "El Titulo es obligatorio", Snackbar.LENGTH_LONG)
-//                                        .setAction("Action", null).show();
-//
-//                            }else{
-//                            SQLiteDatabase dbM = conn.getWritableDatabase();
-//
-//
-//                            String[] parametroID = {ubicaciones.get(posicion-1).getId().toString()};
-//                            ContentValues values = new ContentValues();
-//                            values.put(Sentencias.campoTitulo,textTitulo.getText().toString());
-//                            values.put(Sentencias.campoDesc,textEditTextDesc.getText().toString());
-//
-//                           int up= dbM.update(Sentencias.tablaNombreUb,values,Sentencias.campoID+"=?",parametroID);
-//                            dbM.close();
-//                            if(up!=-1){Toast.makeText(getApplicationContext(),"Actualizado correctamente" ,Toast.LENGTH_SHORT).show();}
-//                            else{Toast.makeText(getApplicationContext(),"Hubo un error al actualizar los datos" ,Toast.LENGTH_SHORT).show();
-//
-//                            }
-//
-//                            Intent inten = new Intent(Editar.this,Editar.class);
-//                            startActivity(inten);
-//                            finish();
-//                        }}
-//                    });
-//                    borrar.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            String st =ubicaciones.get(posicion-1).getId().toString();
-//
-//                            String[] parametro = {st};
-//                           int up= db.delete(Sentencias.tablaNombreUb, Sentencias.campoID+"=?",parametro);
-//                            if(up!=-1){Toast.makeText(getApplicationContext(),"Eliminado correctamente" ,Toast.LENGTH_SHORT).show();}
-//                            else{Toast.makeText(getApplicationContext(),"Hubo un error al borrar los datos" ,Toast.LENGTH_SHORT).show();
-//
-//                            }
-//
-//
-//                            Intent inten = new Intent(Editar.this,Editar.class);
-//                            startActivity(inten);
-//                          finish();
-//
-//                        }
-//                    });
-//                }else{
-//                    textLong.setText("");
-//                    textLat.setText("");
-//                    textEditTextDesc.setText("Descripcion ");
-//                    textFecha.setText("");
-//                    textTitulo.setText("Titulo");
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
+
 
     }
 
-    private void consultarLista() {
-         db= conn.getReadableDatabase();
-        Ubicacion ubicacion = null;
 
-        ubicaciones=new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM "+ Sentencias.tablaNombreUb,null);
-
-
-        while(cursor.moveToNext()){
-            ubicacion = new Ubicacion();
-            ubicacion.setId(cursor.getInt(0));
-            ubicacion.setLatitud(cursor.getDouble(1));
-            ubicacion.setLongitud(cursor.getDouble(2));
-            ubicacion.setTitulo(cursor.getString(4));
-            ubicacion.setDescripcion(cursor.getString(5));
-            ubicacion.setFecha(cursor.getString(3));
-
-            ubicaciones.add(ubicacion);
-        }
-        obtenerLista();
-    }
-    private void obtenerLista(){
-        listaTitulos = new ArrayList<String>();
-
-
-        for (int i=0;i<ubicaciones.size();i++){
-
-            listaTitulos.add(ubicaciones.get(i).getTitulo());
-        }
-
-    }
 }

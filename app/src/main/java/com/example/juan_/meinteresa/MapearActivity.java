@@ -188,7 +188,7 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
             }
         }
 
-    private String getRequestUrl(LatLng origen, LatLng destino) {
+    private String getRequestUrl(LatLng origen, LatLng destino) { //metodo getea url para ubicacion "devuelve en json"
         String str_org = "origin="+origen.latitude +","+origen.longitude;
 
         String str_des = "destination="+destino.latitude+","+destino.longitude;
@@ -205,7 +205,7 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
 
         return url;
     }
-    private String requestDirection(String requestUrl) throws IOException {
+    private String requestDirection(String requestUrl) throws IOException { //onecta con la url
 
         String responseString ="";
 
@@ -250,7 +250,7 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
         return responseString;
     }
 
-    public class TaskRequestDirection extends AsyncTask<String, Void, String>{
+    public class TaskRequestDirection extends AsyncTask<String, Void, String>{ //toma lo devuelto por la url
         @Override
         protected String doInBackground(String... strings) {
             String responseString = "";
@@ -270,7 +270,7 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
         }
 
     }
-    public class TaskParse extends AsyncTask<String,Void,List<List<HashMap<String, String>>> >{
+    public class TaskParse extends AsyncTask<String,Void,List<List<HashMap<String, String>>> >{ //parsea lo devuelto
 
 
         @Override
@@ -289,7 +289,7 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
         }
 
         @Override
-        protected void onPostExecute(List<List<HashMap<String, String>>> lists) {
+        protected void onPostExecute(List<List<HashMap<String, String>>> lists) { //trazo
             ArrayList points=null;
             PolylineOptions polylineOptions=null;
 

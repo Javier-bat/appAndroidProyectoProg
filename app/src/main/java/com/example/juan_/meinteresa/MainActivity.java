@@ -3,6 +3,7 @@ package com.example.juan_.meinteresa;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,6 +25,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.juan_.meinteresa.DAO.UbicacionDAO;
 import com.example.juan_.meinteresa.constantes.Sentencias;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -44,39 +46,29 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-
-
-
-
-
-
-
-
-
-        campoDesc = findViewById(R.id.editTextDesc);
+        campoDesc = findViewById(R.id.editTextDesc); //enlazo campo
         campoTitulo = findViewById(R.id.textTitulo);
 
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() { //si aprieto el boton flotante
             @Override
             public void onClick(View view) {
 
               if(campoTitulo==null || campoTitulo.getText().toString().trim().isEmpty()){
                   Snackbar.make(view, "El Titulo es obligatorio", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+                    .setAction("Action", null).show();  //si el titulo esta vacio aviso
 
               }else {
-                  registrar();
+                  registrar(); //registro si no esta vacio el titulo
                   campoDesc.setText("");
-                  campoTitulo.setText("");
+                  campoTitulo.setText(""); //borros campos
               }
-               // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    //    .setAction("Action", null).show();
+
             }
         });
-
+//dibuja (por defecto android studio)
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -88,7 +80,7 @@ public class MainActivity extends AppCompatActivity
 
         ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this,"db_ubicacion",null,1);
     }
-    public String setFechaActual()
+    public static String setFechaActual() //seteo fecha con formato dia mes año
     {
 
         final Calendar c = Calendar.getInstance();
@@ -98,7 +90,7 @@ public class MainActivity extends AppCompatActivity
 
         return s;
     }
-    private void registrar() {
+    private void registrar() { //si aprieto registrar tomo los permisos y registro
 
         final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2;
 
@@ -110,33 +102,26 @@ public class MainActivity extends AppCompatActivity
                     MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
         }else{
-            LocationManager locationManager;
+            LocationManager locationManager; //creo location
             locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
             Location location =locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if(location!=null){
-                 latitude = location.getLatitude();
+            if(location!=null){ //si no es null (que pasa seguido cuando no puede tomar localizacion)
+                 latitude = location.getLatitude(); //tomo long y lat
                  longitude = location.getLongitude();
-                LatLng ubicacion = new LatLng(latitude, longitude);
+
 
             }else{
                 Toast.makeText(getApplicationContext(),"Ha ocurrido un error compruebe si tiene la ubicacion activada" ,Toast.LENGTH_SHORT).show();
             }}
         if(longitude!=0 && latitude !=0){
-        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this,"db_ubicacion",null,1);
-        SQLiteDatabase db = conn.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put(Sentencias.campoDesc,campoDesc.getText().toString());
-        cv.put(Sentencias.campoLatitud,latitude);
-        cv.put(Sentencias.campoLongitud,longitude);
-        cv.put(Sentencias.campoTitulo,campoTitulo.getText().toString());
-        cv.put(Sentencias.campoFecha,setFechaActual());
-        Long idResult=db.insert(Sentencias.tablaNombreUb, Sentencias.campoID,cv);
+
+        Long idResult= UbicacionDAO.ingresar(getApplicationContext(), longitude, latitude,campoDesc, campoTitulo); //ingreso en DAO los datos
         longitude=0;
         latitude=0;
 
       if(idResult!=null && idResult !=0){  Toast.makeText(getApplicationContext(),"Registrado con exito en la base de datos... ID: "+idResult ,Toast.LENGTH_SHORT).show();}
 
-        db.close();
+
     }}
 
     @Override
@@ -176,12 +161,12 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_edit) {
+        if (id == R.id.nav_edit) { //si aprieto el boton puntos
             Intent inten = new Intent(MainActivity.this,Editar.class);
-            startActivity(inten);
-        } else if (id == R.id.nav_map) {
+            startActivity(inten);//inicio activity editar
+        } else if (id == R.id.nav_map) { //si aprieto el boton mapa
             Intent inten = new Intent(MainActivity.this,MapsActivity.class);
-            startActivity(inten);
+            startActivity(inten); //inicio activity mapa
 
         }
 
