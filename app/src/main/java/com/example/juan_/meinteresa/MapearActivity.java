@@ -108,7 +108,7 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
                 TaskRequestDirection taskRequestDirection = new TaskRequestDirection();
                 taskRequestDirection.execute(url);
                 }else{Toast.makeText(getApplicationContext(),"Revise su conexion"
-                        + " a internet",Toast.LENGTH_LONG);}
+                        + " a internet",Toast.LENGTH_LONG).show();}
             } else {
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto, 17));
@@ -166,7 +166,7 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
                         TaskRequestDirection taskRequestDirection = new TaskRequestDirection();
                         taskRequestDirection.execute(url);
                         }else{Toast.makeText(getApplicationContext(),"Revise su conexion"
-                               + " a internet",Toast.LENGTH_LONG);}
+                               + " a internet",Toast.LENGTH_LONG).show();}
                     }else{
 
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto,17));
@@ -313,7 +313,7 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
                 mMap.addPolyline(polylineOptions);
             }else{
 
-                Toast.makeText(getApplicationContext(),"No se pudo encontrar camino",Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(),"No se pudo encontrar camino",Toast.LENGTH_LONG).show();
             }
         }
     }

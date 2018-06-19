@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.juan_.meinteresa.DAO.ConexionSQLiteHelper;
 import com.example.juan_.meinteresa.DAO.UbicacionDAO;
@@ -101,6 +102,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
             }else{
+                Toast.makeText(getApplicationContext(),"Error al obtener ubicacion compruebe que este activada, los permisos o internet",
+                        Toast.LENGTH_LONG).show();
                 if(puntos!=null){
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(puntos.get(1).getLatitud(),puntos.get(1).getLongitud())),12));
                 }
@@ -177,6 +180,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
                         }else{
+                        Toast.makeText(getApplicationContext(),"Error al obtener ubicacion compruebe que este activada, los permisos o internet",
+                                Toast.LENGTH_LONG).show();
                         if(puntos!=null){
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(puntos.get(1).getLatitud(),puntos.get(1).getLongitud())),12));
                         }
