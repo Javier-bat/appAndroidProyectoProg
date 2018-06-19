@@ -100,13 +100,14 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
                         BitmapDescriptorFactory.HUE_BLUE))
 
                 );
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 17));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto, 14));
                 Log.e("netHabilitada", Boolean.toString(isNetDisponible()));
                 Log.e("accInternet",   Boolean.toString(isOnlineNet()));
                 if(isNetDisponible() && isOnlineNet()){
                 String url = getRequestUrl(ubicacion, punto);
                 TaskRequestDirection taskRequestDirection = new TaskRequestDirection();
                 taskRequestDirection.execute(url);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 14));
                 }else{Toast.makeText(getApplicationContext(),"Revise su conexion"
                         + " a internet",Toast.LENGTH_LONG).show();}
             } else {
@@ -160,11 +161,12 @@ public class MapearActivity extends FragmentActivity implements OnMapReadyCallba
                                 BitmapDescriptorFactory.HUE_BLUE))
 
                         );
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,17));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(punto, 14));
                         if(isNetDisponible() && isOnlineNet()){
                         String url = getRequestUrl(ubicacion,punto);
                         TaskRequestDirection taskRequestDirection = new TaskRequestDirection();
                         taskRequestDirection.execute(url);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 14));
                         }else{Toast.makeText(getApplicationContext(),"Revise su conexion"
                                + " a internet",Toast.LENGTH_LONG).show();}
                     }else{
