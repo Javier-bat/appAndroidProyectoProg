@@ -44,7 +44,10 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".Editar"></activity>
+        <activity android:name=".Editar" />
+        <activity
+            android:name=".MapearActivity"
+            android:label="@string/title_activity_mapear"></activity>
     </application>
 
 </manifest>

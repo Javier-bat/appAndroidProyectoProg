@@ -27,11 +27,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    double longMapeo=0;
+    double latMapeo=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
         if (status == ConnectionResult.SUCCESS) {
@@ -86,6 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }else{
            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER,0,0, (LocationListener) this);
         }*/
+
         mMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2;
@@ -97,24 +102,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
-        }else{mMap.setMyLocationEnabled(true);
-                LocationManager locationManager;
-                locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
-                Location location =locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                if(location!=null){
-                   double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    LatLng ubicacion = new LatLng(latitude, longitude);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion,12));
-                }else{}
+        } else {
 
-
+            mMap.setMyLocationEnabled(true);
+            LocationManager locationManager;
+            locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                LatLng ubicacion = new LatLng(latitude, longitude);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 12));
+            }
 
 
         }
 
 
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode,

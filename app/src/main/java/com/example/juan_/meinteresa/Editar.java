@@ -1,19 +1,25 @@
 package com.example.juan_.meinteresa;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.Telephony;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.example.juan_.meinteresa.constantes.Sentencias;
-
+import com.example.juan_.meinteresa.MapsActivity;
 import com.example.juan_.meinteresa.entidad.Ubicacion;
 
 import java.util.ArrayList;
@@ -25,7 +31,9 @@ public class Editar extends AppCompatActivity {
     ArrayList<Ubicacion> ubicaciones;
     ConexionSQLiteHelper conn;
     TextView textLong,textLat,textDesc,textFecha;
-    Button borrar;
+    EditText textTitulo,textEditTextDesc;
+    Button borrar,editar;
+    Button mapear;
     SQLiteDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +45,10 @@ public class Editar extends AppCompatActivity {
         textDesc=(TextView) findViewById(R.id.textDesc);
         textFecha=(TextView) findViewById(R.id.textFecha);
         borrar=(Button) findViewById(R.id.buttonEliminar);
-
-
+        mapear = findViewById(R.id.buttonMapear);
+        textTitulo = findViewById(R.id.editTextTitulo);
+        textEditTextDesc=findViewById(R.id.editTextDesc);
+        editar = findViewById(R.id.buttonEditar);
 
          conn = new ConexionSQLiteHelper(this,"db_ubicacion",null,1);
 
@@ -52,25 +62,68 @@ public class Editar extends AppCompatActivity {
                 if(posicion!=0) {
                     textLong.setText(Double.toString(ubicaciones.get(posicion - 1).getLongitud()));
                     textLat.setText(Double.toString(ubicaciones.get(posicion - 1).getLatitud()));
-                    textDesc.setText(ubicaciones.get(posicion - 1).getDescripcion());
+                    textEditTextDesc.setText(ubicaciones.get(posicion - 1).getDescripcion());
                     textFecha.setText(ubicaciones.get(posicion - 1).getFecha());
+                    textTitulo.setText(ubicaciones.get(posicion-1).getTitulo());
+                    mapear.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent inten = new Intent(Editar.this,MapearActivity.class);
+
+                            inten.putExtra("latitud",ubicaciones.get(posicion - 1).getLatitud());
+                            inten.putExtra("longitud",ubicaciones.get(posicion - 1).getLongitud());
+                            inten.putExtra("titulo",ubicaciones.get(posicion - 1).getTitulo());
+
+                            startActivity(inten);
+
+                            finish();
+                        }
+                    });
+                    editar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if(textTitulo==null || textTitulo.getText().toString().trim().isEmpty()){
+                                Snackbar.make(view, "El Titulo es obligatorio", Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+
+                            }else{
+                            SQLiteDatabase dbM = conn.getWritableDatabase();
+
+
+                            String[] parametroID = {ubicaciones.get(posicion-1).getId().toString()};
+                            ContentValues values = new ContentValues();
+                            values.put(Sentencias.campoTitulo,textTitulo.getText().toString());
+                            values.put(Sentencias.campoDesc,textEditTextDesc.getText().toString());
+
+                            dbM.update(Sentencias.tablaNombreUb,values,Sentencias.campoID+"=?",parametroID);
+                            dbM.close();
+                            Toast.makeText(getApplicationContext(),"Actualizado correctamente" ,Toast.LENGTH_SHORT).show();
+                            Intent inten = new Intent(Editar.this,Editar.class);
+                            startActivity(inten);
+                            finish();
+                        }}
+                    });
                     borrar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             String st =ubicaciones.get(posicion-1).getId().toString();
+
                             String[] parametro = {st};
                             db.delete(Sentencias.tablaNombreUb, Sentencias.campoID+"=?",parametro);
+                            Toast.makeText(getApplicationContext(),"Eliminado correctamente" ,Toast.LENGTH_SHORT).show();
                             Intent inten = new Intent(Editar.this,Editar.class);
                             startActivity(inten);
                           finish();
+
                         }
                     });
                 }else{
-                    textLong.setText("Longitud");
-                    textLat.setText("Latitud");
-                    textDesc.setText("Descripcion ");
-                    textFecha.setText("Fecha");
-
+                    textLong.setText("");
+                    textLat.setText("");
+                    textEditTextDesc.setText("Descripcion ");
+                    textFecha.setText("");
+                    textTitulo.setText("Titulo");
                 }
             }
 

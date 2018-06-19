@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -61,10 +62,16 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registrar();
-                campoDesc.setText("");
-                campoTitulo.setText("");
 
+              if(campoTitulo==null || campoTitulo.getText().toString().trim().isEmpty()){
+                  Snackbar.make(view, "El Titulo es obligatorio", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+
+              }else {
+                  registrar();
+                  campoDesc.setText("");
+                  campoTitulo.setText("");
+              }
                // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     //    .setAction("Action", null).show();
             }
